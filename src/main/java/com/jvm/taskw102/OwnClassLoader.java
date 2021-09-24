@@ -22,6 +22,8 @@ public class OwnClassLoader extends ClassLoader {
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         String suffix = ".xlass";
+        // 增加包名路径转换
+        name = name.replace(".", "/");
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(name + suffix);
         try{
             int length = inputStream.available();
