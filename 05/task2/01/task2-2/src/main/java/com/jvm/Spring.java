@@ -5,6 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * 通过xml扫描 @Component 注解
+ *
  * @author qindong
  * @date 2021/10/15 14:47
  */

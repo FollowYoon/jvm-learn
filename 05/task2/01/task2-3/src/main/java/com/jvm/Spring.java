@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 通过 @ComponentScan 扫描
+ *
  * @author qindong
  * @date 2021/10/15 14:47
  */
