@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jvm.db.dao.T1Dao">
+
+  <insert id="save" parameterType="com.jvm.db.po.T1">
+    insert into t1 (id) values (#{id})
+  </insert>
+
+  <select id="query" parameterType="java.lang.Integer" resultType="com.jvm.db.po.T1">
+    select * from t1 where id = #{id}
+  </select>
+
+</mapper>
