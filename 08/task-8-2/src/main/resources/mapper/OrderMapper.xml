@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jvm.db.dao.OrderDao">
+
+  <insert id="save" parameterType="com.jvm.db.po.OrderInfoBase">
+    insert into order_info_base (user_id, order_status, goods_count) values (#{userId}, #{orderStatus}, #{goodsCount})
+  </insert>
+
+  <update id="update" parameterType="com.jvm.db.po.OrderInfoBase">
+    update order_info_base
+    set order_status = #{orderStatus}
+    where id = #{id}
+  </update>
+
+  <delete id="delete">
+    delete from `order_info_base` where id = #{id}
+  </delete>
+
+  <select id="query" parameterType="java.lang.Long" resultType="com.jvm.db.po.OrderInfoBase">
+    select * from order_info_base where id = #{id}
+  </select>
+
+</mapper>

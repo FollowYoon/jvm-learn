@@ -1,0 +1,14 @@
+server:
+  port: 8088
+spring:
+  datasource:
+    name: sharding-datasource
+    # 使用 sharding-proxy代理的数据库连接
+    url: jdbc:mysql://localhost:3307/sharding_db?serverTimezone=UTC&useSSL=false
+    username: root
+    password: root
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  mapper-locations: classpath*:mapper/*Mapper.xml
