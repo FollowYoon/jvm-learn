@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.account.dao.AccountDao">
+
+  <update id="pay" parameterType="com.example.account.po.Account">
+    update `account`
+    set us_balance = us_balance + #{usBalance},
+        cny_balance = cny_balance + #{cnyBalance}
+    where us_balance >= #{usBalance} and cny_balance >= #{cnyBalance} and id = #{id}
+  </update>
+
+</mapper>
