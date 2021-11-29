@@ -28,7 +28,16 @@ public final class Rpcfx {
 
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(serviceClass);
-        enhancer.setCallback(new RpcIntercept(serviceClass.getName(), url));
+        enhancer.setCallback(new RpcIntercept(serviceClass.getName(), url, null, null));
+        return (T) enhancer.create();
+    }
+
+    public static <T> T create(final Class<T> serviceClass, final String url, final String group, final String version) {
+        StringBuilder providerName = new StringBuilder();
+        providerName.append(serviceClass.getName()).append(":").append(group).append(":").append(version);
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(serviceClass);
+        enhancer.setCallback(new RpcIntercept(serviceClass.getName(), url, group, version));
         return (T) enhancer.create();
     }
 
@@ -38,10 +47,14 @@ public final class Rpcfx {
 
         private final String className;
         private final String url;
+        private final String group;
+        private final String version;
 
-        public RpcIntercept(String serviceClassName, String rpcUrl) {
+        public RpcIntercept(String serviceClassName, String rpcUrl, String group, String version) {
             this.className = serviceClassName;
             this.url = rpcUrl;
+            this.group = group;
+            this.version = version;
         }
 
         @Override
@@ -50,6 +63,8 @@ public final class Rpcfx {
             request.setServiceClass(className);
             request.setMethod(method.getName());
             request.setParams(objects);
+            request.setGroup(group);
+            request.setVersion(version);
             RpcfxResponse response = post(request, url);
             if(!response.isStatus()){
                 throw new RpcfxException("请求异常!");
