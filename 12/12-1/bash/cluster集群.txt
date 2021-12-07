@@ -1,0 +1,91 @@
+# cluster集群安装配置 三主三从
+
+cd /data/redis
+mkdir cluster
+make
+make PREFIX=/data/redis/cluster install
+
+# 创建对应的文件夹
+mkdir cluster
+cd cluster
+mkdir 7001
+mkdir 7002
+mkdir 7003
+mkdir 7004
+mkdir 7005
+mkdir 7006
+
+# 启动所有节点
+见 集群启动脚本
+
+# 配置集群
+./redis-cli --cluster create 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 127.0.0.1:7004 127.0.0.1:7005 127.0.0.1:7006 --cluster-replicas 1
+
+>>> Performing hash slots allocation on 6 nodes...
+Master[0] -> Slots 0 - 5460
+Master[1] -> Slots 5461 - 10922
+Master[2] -> Slots 10923 - 16383
+Adding replica 127.0.0.1:7005 to 127.0.0.1:7001
+Adding replica 127.0.0.1:7006 to 127.0.0.1:7002
+Adding replica 127.0.0.1:7004 to 127.0.0.1:7003
+>>> Trying to optimize slaves allocation for anti-affinity
+[WARNING] Some slaves are in the same host as their master
+M: 1d14f9f568dbff296dae38b33d03d78b04a290a1 127.0.0.1:7001
+   slots:[0-5460] (5461 slots) master
+M: ee9f8800b53550b1a6c4d41949c27daa7b59139d 127.0.0.1:7002
+   slots:[5461-10922] (5462 slots) master
+M: f970bcd815226509119e229d7c8b796db2ad0524 127.0.0.1:7003
+   slots:[10923-16383] (5461 slots) master
+S: 670488c5209e8981ecd46ca4722c871438ac3348 127.0.0.1:7004
+   replicates 1d14f9f568dbff296dae38b33d03d78b04a290a1
+S: 79380e2a1a9893e8ba66e446da264dcefbe67e0a 127.0.0.1:7005
+   replicates ee9f8800b53550b1a6c4d41949c27daa7b59139d
+S: 7909e124930acbd0f6c10250ae1c39e5872e3461 127.0.0.1:7006
+   replicates f970bcd815226509119e229d7c8b796db2ad0524
+Can I set the above configuration? (type 'yes' to accept): yes
+>>> Nodes configuration updated
+>>> Assign a different config epoch to each node
+>>> Sending CLUSTER MEET messages to join the cluster
+Waiting for the cluster to join
+......
+>>> Performing Cluster Check (using node 127.0.0.1:7001)
+M: 1d14f9f568dbff296dae38b33d03d78b04a290a1 127.0.0.1:7001
+   slots:[0-5460] (5461 slots) master
+   1 additional replica(s)
+M: ee9f8800b53550b1a6c4d41949c27daa7b59139d 127.0.0.1:7002
+   slots:[5461-10922] (5462 slots) master
+   1 additional replica(s)
+S: 670488c5209e8981ecd46ca4722c871438ac3348 127.0.0.1:7004
+   slots: (0 slots) slave
+   replicates 1d14f9f568dbff296dae38b33d03d78b04a290a1
+M: f970bcd815226509119e229d7c8b796db2ad0524 127.0.0.1:7003
+   slots:[10923-16383] (5461 slots) master
+   1 additional replica(s)
+S: 7909e124930acbd0f6c10250ae1c39e5872e3461 127.0.0.1:7006
+   slots: (0 slots) slave
+   replicates f970bcd815226509119e229d7c8b796db2ad0524
+S: 79380e2a1a9893e8ba66e446da264dcefbe67e0a 127.0.0.1:7005
+   slots: (0 slots) slave
+   replicates ee9f8800b53550b1a6c4d41949c27daa7b59139d
+[OK] All nodes agree about slots configuration.
+>>> Check for open slots...
+>>> Check slots coverage...
+[OK] All 16384 slots covered.
+
+# 测试集群连接
+./redis-cli -c -p 7001
+127.0.0.1:7001> set name 1
+-> Redirected to slot [5798] located at 127.0.0.1:7002
+OK
+127.0.0.1:7002> get name
+"1"
+
+
+./redis-cli -c -p 7002
+127.0.0.1:7002> get name
+"1"
+
+
+
+
+

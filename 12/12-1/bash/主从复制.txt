@@ -1,0 +1,32 @@
+# 安装和启动redis-6379
+cd /data/redis/6379
+make
+make PREFIX=/data/redis/6379 install
+cd bin
+./redis-server ../redis.conf
+
+# 安装和启动redis-6380
+cd /data/redis/6380
+make
+make PREFIX=/data/redis/6380 install
+cd bin
+./redis-server ../redis.conf
+
+#连接redis-6379
+./redis-cli -p 6379
+set port 6379
+get port
+
+#连接redis-6380
+./redis-cli -p 6380
+set port 6380
+get port
+
+#配置主从复制
+slaveof 127.0.0.1 6379
+get port
+
+
+
+
+

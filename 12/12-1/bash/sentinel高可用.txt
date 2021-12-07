@@ -1,0 +1,26 @@
+# 启动两个sentinel
+cd /data/redis/6379/bin
+./redis-sentinel ../sentinel0.conf
+
+cd /data/redis/6380/bin
+./redis-sentinel ../sentinel1.conf
+
+./redis-cli -p 6380
+# 设置6380为6379的从库
+slaveof 127.0.0.1 6379
+# info查询此时role为slave
+info
+
+# ctrl+c停止6379的redis
+# 经过约10s后，再查看6380的状态，此时的role为master
+info
+
+set port 6380
+get port
+
+# 此时再去启动6379
+cd /data/redis/6379/bin
+./redis-server ../redis.conf
+
+#通过info查看状态，此时6379的role为slave
+info
